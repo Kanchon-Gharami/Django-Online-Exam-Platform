@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <h2 class="text-center mt-4">Question setting</h2>
+  <p class="text-center">{{ examName }}</p>
+
+
+    <div class="container-fluid p-0">
+      <div class="row m-0">
+        <div class="col-xl-3 mx-auto my-5">
+
+          <form action="{% url 'app:quesSubmittign' pk=questionSet_pk %}" method="post">
+            {% csrf_token %}
+
+            <h3>Numeric Questions</h3>
+            {% for i in noNumeric|get_range %}
+            <h5>Question No. {{ i }}</h5>
+              <div class="form-group">
+                <label>Insert Numeric Valued Questions: </label>
+                <input type="text" class="form-control" name="numericQuestion" array_column="{{ i }}">
+              </div>
+              <div class="form-group">
+                <label>Insert Marks of this Questions: </label>
+                <input type="number" class="form-control" name="numericMarks" array_column="{{ i }}">
+              </div>
+              <div class="form-group">
+                <label>Insert correct Ans: </label>
+                <input type="number" class="form-control" name="numericCorrectAns" array_column="{{ i }}">
+              </div>
+              <hr>
+            {% endfor %}
+
+            <hr>
+
+            <h3 class="mt-5">True False Valued Questions</h3>
+            {% for i in noTureFalse|get_range %}
+            <h5>Question No. {{ i }}</h5>
+            <div class="form-group">
+              <label>Insert True False Valued Valued Questions: </label>
+              <input type="text" class="form-control" name="tureFalseQuestion" array_column="{{ i }}">
+            </div>
+            <div class="form-group">
+              <label>Insert Marks of this Questions: </label>
+              <input type="number" class="form-control" name="tureFalseMarks" array_column="{{ i }}">
+            </div>
+            <div class="form-group">
+              <label>Insert correct Ans: </label>
+              <div class="row m-0">
+                <label for="True">True</label>
+                <input for="True" type="radio" name="tureFalseCorrectAns" value="True" array_column="{{ i }}">
+              </div>
+              <div class="row">
+                <label for="False">False</label>
+                <input for="False" type="radio" name="tureFalseCorrectAns" value="False" array_column="{{ i }}">
+              </div>
+            </div>
+            <hr>
+            {% endfor %}
+
+            <hr>
+
+
+
+            <button type="submit" class="btn btn-info">Go!</button>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}
