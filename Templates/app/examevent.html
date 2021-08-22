@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container-fluid bg-light py-4" style="min-height:660px !important;">
+    <h2 class="text-center">Exam & event</h2>
+    <p class="text-center">Explore all upcoming exams and start now!</p>
+
+    {% if QuestionSet_obj  %}
+    <div class="row m-0 mt-3" style="padding-top: 30px; padding-bottom: 30px;">
+
+      {% for i in QuestionSet_obj %}
+      <div class="card m-4" style="width: 20rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ i.examName }}</h5>
+          <hr>
+          <div class="row m-0">
+            <small class="card-text px-2 py-1 rounded my-1" style="color: white; background-color:orange;">{{ i.topic }}</small>
+            {% if i.submissionTimeLimit %}
+              <small class="card-text px-2 py-1 rounded ml-1 my-1" style="color: white; background-color: #7C83FD;">No TimeLimit!</small>
+            {% endif %}
+            {% if i.multipleSubmission %}
+              <small class="card-text px-2 py-1 rounded ml-1 my-1" style="color: white; background-color: #7C83FD;">Multi-Submission!</small>
+            {% endif %}
+          </div>
+          <div class="row m-0 mt-3">
+            <p class="card-subtitle" style="font-size: 14px;">{{ i.startingTime }}</p>
+            <p class="card-subtitle ml-auto mr-2" style="font-size: 14px;">{{ i.durationInMinits }} Min</p>
+          </div>
+          <div class="my-2"></div>
+          <small class="card-text dscrptn_limit" style="color: #2B2B2B;">{{ i.description }}</small>
+          <div class="row mx-0 my-3">
+            <button type="submit" name="button" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#ExamDetails_{{ i.pk }}">View Details</button>
+            <a class="ml-2" href="{% url 'app:Exam' questionsetpk=i.pk %}">
+              <button type="submit" name="button" class="btn btn-outline-success btn-sm">Go & Start!</button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="ExamDetails_{{ i.pk }}" tabindex="-1" role="dialog" aria-labelledby="ExamDetails_{{ i.pk }}Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ExamDetails_{{ i.pk }}Label">{{ i.examName }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="color: #4A503D;">
+              <p>Topic:
+                <small class="card-text px-2 py-1 rounded" style="color: white; background-color:orange;">{{ i.topic }}</small>
+              </p>
+              <p>Exam Time: <span style="color: black;">{{ i.startingTime }}</span> </p>
+              <p>Duration: <span style="color: black;">{{ i.durationInMinits }} Minits</span> </p>
+              <p>Total: <span style="color: black;">{{ i.totalMarks }} Marks</span> </p>
+              <p>Question Setter: <span style="color: black;">{{ i.questionSetter.name }}</span> </p>
+              <p>Description: {{ i.description }} </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {% endfor %}
+
+    </div>
+
+    {% else %}
+    <div class="rom m-0 d-flex justify-content-center" style="margin-top: 100px !important;">
+      <img src="{% static 'imgs/no-search-found.png' %}" alt="Nothing Found" class="img-fluid">
+    </div>
+    {% endif %}
+
+  </div>
+
+
+<style>
+  .dscrptn_limit{
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    height: auto;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+</style>
+
+
+{% endblock %}
+
+
+
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary">
+  Launch demo modal
+</button>

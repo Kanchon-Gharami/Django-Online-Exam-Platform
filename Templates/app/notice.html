@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container-fluid bg-light py-4" style="min-height:660px !important;">
+    <h2 class="text-center">Notice</h2>
+    <p class="text-center">Explore All Notices!</p>
+
+    <div class="col-xl-10 mx-auto py-5" style="background-color: white;">
+      {% if list %}
+      <div class="table-responsive">
+        <table class="table table-hover border m-0" id ="sort">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Posted By</th>
+              <th scope="col">Topic</th>
+              <th scope="col">Description</th>
+              <th scope="col">Posting Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in list %}
+            <tr>
+              <th scope="row">{{ i.pk }}</th>
+              <td>{{ i.user }}</td>
+              <td><button type="button" class="btn btn-primary btn-sm">{{ i.topic }}</button></td>
+              <td class="mytableoverflow">{{ i.details }}</td>
+              <td>{{ i.postingTime }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% else %}
+      <div class="rom m-0 d-flex justify-content-center" style="margin-top: 100px !important;">
+        <img src="{% static 'imgs/no-search-found.png' %}" alt="Nothing Found" class="img-fluid">
+      </div>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <button type="button" class="btn btn-primary my-2 ml-auto" data-toggle="modal" data-target="#myInputModal">
+          Add New Notice
+        </button>
+      {% else %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login To Add Notice</button>
+      {% endif %}
+      <!-- Button trigger modal -->
+
+    </div>
+
+  </div>
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myInputModal" tabindex="-1" role="dialog" aria-labelledby="myInputModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myInputModalLabel">Add New Notice</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="row m-0" method="post">
+            {% csrf_token %}
+            <div class="form-group col-xl-12">
+              <label>Topic</label>
+              <input type="text" class="form-control" name="topic" placeholder="Enter Topic" required>
+            </div>
+            <div class="form-group col-xl-12">
+              <label>Details</label>
+              <textarea class="form-control" name="details" rows="5" placeholder="Enter Details" required></textarea>
+            </div>
+            <div class="col-xl-12">
+              <div class="row m-0">
+                <button type="button" class="btn btn-secondary ml-auto" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary ml-2">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<style>
+  .mytableoverflow{
+    white-space: nowrap;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mytableoverflow:hover {
+    word-wrap: break-word;
+    overflow: visible;
+    white-space: normal;
+  }
+</style>
+
+
+{% endblock %}

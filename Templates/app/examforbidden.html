@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row m-0 d-flex justify-content-center" style="padding-top: 80px;">
+    <div class="col-xl-4 mt-5" style="padding-top: 100px;">
+      <h2>
+        Forbidden
+      </h2>
+      <h5>
+        YOU MUST NEED TO FOLLOW THESE RULES:
+      </h5>
+      <hr>
+      <ul>
+        <li>Student are only allow in between exam running time</li>
+        <li>Students allow to participate a single exam once</li>
+        <li>Students must need to login from correct account</li>
+      </ul>
+    </div>
+    <div class="col-xl-4 ml-5">
+      <img src="{% static 'imgs/403.jpg' %}" alt="403 error" class="img-fluid">
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container shadow p-3 mb-5 bg-white mt-5 px-4">
+    <div class="col-xl-12">
+      <h4 class="mt-2">Welcome Back {{ request.user }}</h4>
+      <hr>
+      <div class="row m-0 my-2">
+        <div class="col-xl-8 my-1">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ QuestionSetter_obj.name }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Full Name</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ request.user }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">User Name</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-8 my-1">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ QuestionSetter_obj.email }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Email</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ QuestionSetter_obj.rank }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Rank</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-8 my-1">
+          <blockquote class="blockquote">
+            <p class="mb-0">Vaficication Status: {{ QuestionSetter_obj.isVarified }}</p>
+            {% if QuestionSetter_obj.isVarified %}
+            <footer class="blockquote-footer"><cite title="Source Title">Congrats! You are varrified question setter.</cite></footer>
+            {% else %}
+            <footer class="blockquote-footer"><cite title="Source Title">Opps! Please wait for admin approval.</cite></footer>
+            {% endif %}
+          </blockquote>
+        </div>
+      </div>
+
+
+      {% if QuestionSetter_obj.isVarified %}
+      <div class="row m-0 my-5">
+        <div class="col-xl-12 p-0 m-0">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="Exams-tab" data-toggle="tab" href="#Exams" role="tab" aria-controls="Exams" aria-selected="true">Upcoming Exams</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="Taken-tab" data-toggle="tab" href="#Taken" role="tab" aria-controls="Taken" aria-selected="false">Taken</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="SetNewQuestion-tab" data-toggle="tab" href="#SetNewQuestion" role="tab" aria-controls="SetNewQuestion" aria-selected="false">Create New Exam</a>
+            </li>
+          </ul>
+          <div class="tab-content my-4 mx-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="Exams" role="tabpanel" aria-labelledby="Exams-tab">
+              {% if QuestionSet_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover border m-0" id ="sort">
+                  <thead>
+                    <tr>
+                      <th scope="col">Exam ID</th>
+                      <th scope="col">Exam Name</th>
+                      <th scope="col">topic</th>
+                      <th scope="col">Starting Time</th>
+                      <th scope="col">Duration</th>
+                      <th scope="col">Finish</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in QuestionSet_obj %}
+                    <tr>
+                      <th scope="row">{{ i.pk }}</th>
+                      <td class="mytableoverflow">{{ i.examName }}</td>
+                      <td><button type="button" class="btn btn-sm" style="color: white; background-color: orange;">{{ i.topic }}</button></td>
+                      <td>{{ i.startingTime }}</td>
+                      <td>{{ i.durationInMinits }}</td>
+                      <td>
+                        <button type="button" class="btn btn-sm" style="color: white; background-color: #7C83FD;"  data-toggle="modal" data-target="#ReleseMarksModal_{{ i.pk }}">
+                          Go!
+                        </button>
+                      </td>
+                      <td><a href="{% url 'app:QuestionSetting' pk=i.pk %}"><img src="{% static 'icons/edit.svg' %}" class="myactnsize"></a></td>
+                      <td><a href="{% url 'app:DeleteExam' pk=i.pk %}"><img src="{% static 'icons/delete.svg' %}" class="myactnsize"></a></td>
+                    </tr>
+
+                    <!--ReleseMarksModal_{{ i.pk }}  Modal -->
+                    <div class="modal fade" id="ReleseMarksModal_{{ i.pk }}" tabindex="-1" role="dialog" aria-labelledby="ReleseMarksModal_{{ i.pk }}Title" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="ReleseMarksModal_{{ i.pk }}Title">Declare End of Exam</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>After declaration of finishing this exam-</p>
+                            <ol>
+                              <li>Student willn't able to join this exam anymore</li>
+                              <li>Marks of all student will be relesed</li>
+                              <li>This event result will be displayed on result menu</li>
+                            </ol>
+                            <p>Are your sure you want to countinue this process? </p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <a href="{% url 'app:ReleseExam' pk=i.pk %}" class="btn btn-primary btn-sm">Go and Process</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+                <div class="row m-0 bg-light">
+                  <i class="my-3 mx-2">Opps! No Exam is created by you!</i>
+                </div>
+              {% endif %}
+              <!--
+              <div class="row m-0 mt-5">
+                <a class="ml-auto" href="#">
+                  <button type="button" class="btn btn-success">Add New Exam</button>
+                </a>
+              </div>
+              -->
+            </div>
+
+
+            <div class="tab-pane fade" id="Taken" role="tabpanel" aria-labelledby="Rules-tab">
+              {% if TakenQuestionSet_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover border m-0" id ="sort1">
+                  <thead>
+                    <tr>
+                      <th scope="col">Exam ID</th>
+                      <th scope="col">Exam Name</th>
+                      <th scope="col">topic</th>
+                      <th scope="col">Starting Time</th>
+                      <th scope="col">Duration</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in TakenQuestionSet_obj %}
+                    <tr>
+                      <th scope="row">{{ i.pk }}</th>
+                      <td class="mytableoverflow">{{ i.examName }}</td>
+                      <td><button type="button" class="btn btn-primary btn-sm">{{ i.topic }}</button></td>
+                      <td>{{ i.startingTime }}</td>
+                      <td>{{ i.durationInMinits }}</td>
+                      <td><a href="{% url 'app:DeleteExam' pk=i.pk %}"><img src="{% static 'icons/delete.svg' %}" class="myactnsize"></a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+                <div class="row m-0 bg-light">
+                  <i class="my-3 mx-2">Opps! No exam is completed under you!</i>
+                </div>
+              {% endif %}
+            </div>
+
+
+            <div class="tab-pane fade" id="SetNewQuestion" role="tabpanel" aria-labelledby="SetNewQuestion-tab">
+              <form class="row m-0" method="post">
+                {% csrf_token %}
+                <div class="form-group col-xl-8">
+                  <label>Exam Name</label>
+                  <input type="text" class="form-control" name="examName" placeholder="Enter Exam Name" required>
+                </div>
+                <div class="form-group col-xl-4">
+                  <label>Topic</label>
+                  <input type="text" class="form-control" name="topic" placeholder="Enter Topic" required>
+                </div>
+                <div class="form-group col-xl-12">
+                  <label>Description</label>
+                  <textarea class="form-control" name="description" rows="6" placeholder="Enter Description" required></textarea>
+                </div>
+                <div class="form-group col-xl-4">
+                  <label>Time Limit Conditions</label>
+                  <select class="form-select form-control" aria-label="Default select example" name="submissionTimeLimit" required>
+                    <option value="False" selected>Not Time Limit</option>
+                    <option value="True">Only Open In Selected Time</option>
+                  </select>
+                </div>
+                <div class="form-group col-xl-4">
+                  <label>Stating Date Time</label>
+                  <input type="datetime-local" name="startingTime" class="form-control" required>
+                </div>
+                <div class="form-group col-xl-4">
+                  <label>Duration (in Minits)</label>
+                  <input type="number" step="0.01" name="durationInMinits" class="form-control" placeholder="Enter Total Marks" required>
+                </div>
+                <div class="form-group col-xl-4">
+                  <label>Allow Multiple Submission?</label>
+                  <div class="radio">
+                    <label><input type="radio" class="mx-2" name="multipleSubmission" value="False" checked required>False</label>
+                    <label><input type="radio" class="mx-2" name="multipleSubmission" value="True" required>True</label>
+                  </div>
+                </div>
+                <div class="col-xl-12 mt-3">
+                  <button type="submit" class="btn btn-primary float-right">Create</button>
+                </div>
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      <div class="row m-0 my-5">
+        <div class="col-xl-12 p-0 m-0">
+          <h4>Please Wait Until Admin Approve You</h4>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(function() {
+      $('#sort1').DataTable();
+  } );
+  </script>
+
+
+<style>
+  .mytableoverflow{
+    white-space: nowrap;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mytableoverflow:hover {
+    word-wrap: break-word;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .myactnsize{
+    max-width: 20px;
+  }
+
+</style>
+
+{% endblock %}

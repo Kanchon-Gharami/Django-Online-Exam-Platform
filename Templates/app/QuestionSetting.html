@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container shadow p-3 mb-5 bg-white mt-5 px-4">
+    <div class="col-xl-12">
+      <h4 class="mt-2">Exam Details</h4>
+      <hr>
+      <div class="row m-0 my-1">
+        <div class="col-xl-9 my-2">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Exam Name</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.examName }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-3 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">topic</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.topic }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-5 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Starting Time</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.startingTime }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Duration</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.durationInMinits }} Minits</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-3 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Total</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.totalMarks }} Marks</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-10 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Description</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.description }}</p>
+          </blockquote>
+        </div>
+      </div>
+
+
+      <div style="height:20px;"></div>
+
+
+
+      <div class="row m-0 mt-5">
+        <h4 class="col-xl-6 p-0 ">Create/ Edit Question Paper</h4>
+        <div class="col-xl-6 p-0 m-0 text-right">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary ml-auto" data-toggle="modal" data-target="#AddNumericQuestionCenter">
+            Add Numeric Question
+          </button>
+          <!-- Button trigger Add True False Questionmodal -->
+          <button type="button" class="btn btn-warning  ml-2" data-toggle="modal" data-target="#AddTrueFalseQuestionCenter">
+            Add True False Question
+          </button>
+        </div>
+      </div>
+      <hr>
+
+
+      {% for i in QuestionSet_obj.questionNumeric.all %}
+      <div class="col-xl-12 p-0 my-5">
+        <div class="row m-0">
+          <div class="col-xl-10 p-0 m-0">
+            <h5>Q-1.{{forloop.counter}}: {{ i.question }}</h5>
+          </div>
+          <div class="col-xl-2 p-0 m-0">
+            <p class="text-right">Marks: {{ i.marks }}</p>
+          </div>
+        </div>
+        <p class="text-left">Correct Ans: {{ i.correctAns }}</p>
+        <a href="{% url 'app:DeleteNumericQuestion' pk=i.pk %}" style="color: orange;">
+          Delete?
+          <img src="{% static 'icons/delete.svg' %}" class="myactnsize ml-1" style="margin-top: -5px;">
+        </a>
+      </div>
+      <div style="height: 1px;"></div>
+      {% endfor %}
+
+
+      {% for i in QuestionSet_obj.questionTureFalse.all %}
+      <div class="col-xl-12 p-0 my-5">
+        <div class="row m-0">
+          <div class="col-xl-10 p-0 m-0">
+            <h5>Q-2.{{forloop.counter}}: {{ i.question }}</h5>
+          </div>
+          <div class="col-xl-2 p-0 m-0">
+            <p class="text-right">Marks: {{ i.marks }}</p>
+          </div>
+        </div>
+        <p class="text-left">Correct Ans: {{ i.correctAns }}</p>
+        <a href="{% url 'app:DeleteTrueFalseQuestion' pk=i.pk %}" style="color: orange;">
+          Delete?
+          <img src="{% static 'icons/delete.svg' %}" class="myactnsize ml-1" style="margin-top: -5px;">
+        </a>
+      </div>
+      <div style="height: 1px;"></div>
+      {% endfor %}
+
+      <div style="height: 20px;"></div>
+
+    </div>
+  </div>
+
+  <div class="row m-0">
+    <a href="{% url 'app:redirectToProfile' %}" type="button" class="btn btn-warning mx-auto">Go back</a>
+  </div>
+
+  <div style="height: 30px;"></div>
+
+
+
+
+
+
+
+<!-- Add True False Question Modal -->
+<div class="modal fade" id="AddTrueFalseQuestionCenter" tabindex="-1" role="dialog" aria-labelledby="AddTrueFalseQuestionCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddTrueFalseQuestionLongTitle">Add True False Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="row m-0" method="post" action="{% url 'app:AddTrueFalseQuestion' questionsetpk=QuestionSet_obj.pk %}">
+          {% csrf_token %}
+          <div class="form-group col-xl-12">
+            <label>Question</label>
+            <textarea class="form-control" name="question" rows="5" placeholder="Enter Question" required></textarea>
+          </div>
+          <div class="form-group col-xl-12">
+            <label>Correct Ans</label>
+            <div class="radio">
+              <label><input type="radio" class="mx-2" name="correctAns" value="True" checked>True</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" class="mx-2" name="correctAns" value="False">False</label>
+            </div>
+          </div>
+          <div class="form-group col-xl-12">
+            <label>Marks</label>
+            <input type="number" class="form-control" name="marks" placeholder="Enter Marks" required>
+          </div>
+          <div class="col-xl-12">
+            <div class="row m-0">
+              <button type="button" class="btn btn-secondary ml-auto" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary ml-2">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AddNumericQuestion Modal -->
+<div class="modal fade" id="AddNumericQuestionCenter" tabindex="-1" role="dialog" aria-labelledby="AddNumericQuestionCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddNumericQuestionLongTitle">Add Numeric Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="row m-0" method="post" action="{% url 'app:AddNumericQuestion' questionsetpk=QuestionSet_obj.pk %}">
+          {% csrf_token %}
+          <div class="form-group col-xl-12">
+            <label>Question</label>
+            <textarea class="form-control" name="question" rows="5" placeholder="Enter Question" required></textarea>
+          </div>
+          <div class="form-group col-xl-12">
+            <label>Correct Ans</label>
+            <input type="number" class="form-control" name="correctAns" placeholder="Enter Correct Ans" required>
+          </div>
+          <div class="form-group col-xl-12">
+            <label>Marks</label>
+            <input type="number" class="form-control" name="marks" placeholder="Enter Marks" required>
+          </div>
+          <div class="col-xl-12">
+            <div class="row m-0">
+              <button type="button" class="btn btn-secondary ml-auto" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary ml-2">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<style>
+  .myactnsize{
+    max-width: 20px;
+  }
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid bg-light" style="min-height: 660px;">
+  <div class="row m-0 d-flex justify-content-center" style="padding-top: 20px;">
+    <div class="col-xl-8 mt-5" style="padding-top: 0px; background-color: white;">
+      <h4 class=mt-4>{{ StudentAnsSet_obj.questionSet.examName }}</h4>
+      <hr>
+
+      <div class="row m-0 my-1">
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Name</cite></footer>
+            <p class="mb-0"> {{ Student_obj.name }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Student ID</cite></footer>
+            <p class="mb-0"> {{ Student_obj.studentID }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Obtained Marks</cite></footer>
+            <p class="mb-0"> {{ StudentAnsSet_obj.totalObtainedMarks }} Marks</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Submission Time</cite></footer>
+            <p class="mb-0"> {{ StudentAnsSet_obj.submissionTime }} </p>
+          </blockquote>
+        </div>
+      </div>
+
+
+      <h4 class=mt-5>Answer Sheet</h4>
+      <hr>
+      {% for i in StudentAnsSet_obj.studentAnsTureFalse.all %}
+      <div class="col-xl-12 p-0 my-5">
+        <div class="row m-0">
+          <div class="col-xl-10 p-0 m-0 mb-2">
+            <h6 class="m-0 p-0">Q-1.{{forloop.counter}}: {{ i.question.question }}</h6>
+          </div>
+          <div class="col-xl-2 p-0 m-0">
+            <p class="text-right">Marks: {{ i.question.marks }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-left">Correct Ans: {{ i.question.correctAns }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-center">Given Ans: {{ i.givenAns }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-right">Obtained Marks: {{ i.obtainedMarks }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% for i in StudentAnsSet_obj.studentAnsNumeric.all %}
+      <div class="col-xl-12 p-0 my-5">
+        <div class="row m-0">
+          <div class="col-xl-10 p-0 m-0 mb-2">
+            <h6 class="m-0 p-0">Q-2.{{forloop.counter}}: {{ i.question.question }}</h6>
+          </div>
+          <div class="col-xl-2 p-0 m-0">
+            <p class="text-right">Marks: {{ i.question.marks }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-left">Correct Ans: {{ i.question.correctAns }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-center">Given Ans: {{ i.givenAns }}</p>
+          </div>
+          <div class="col-xl-4 p-0 m-0">
+            <p class="text-right">Obtained Marks: {{ i.obtainedMarks }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+
+
+    </div>
+  </div>
+
+  <div class="rom d-flex justify-content-center m-0 my-5">
+    <input type=button class="btn btn-warning" value="Previous Page" onClick="javascript:history.go(-1);">
+  </div>
+
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid bg-light" style="min-height: 560px; padding-bottom: 100px;">
+  <div class="row m-0 d-flex justify-content-center" style="padding-top: 20px;">
+    <div class="col-xl-8 mt-5 pb-5" style="padding-top: 0px; background-color: white;">
+      <h3 class="mt-4">{{ Question_obj.examName }}</h3>
+      <hr>
+
+      <div class="row m-0 my-1">
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">topic</cite></footer>
+            <p class="mb-0"> {{ Question_obj.topic }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Starting Time</cite></footer>
+            <p class="mb-0"> {{ Question_obj.startingTime }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Duration</cite></footer>
+            <p class="mb-0"> {{ Question_obj.durationInMinits }} Minits</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Total</cite></footer>
+            <p class="mb-0"> {{ Question_obj.totalMarks }} Marks</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-12 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Description</cite></footer>
+            <p class="mb-0" style="font-size: 15px;"> {{ Question_obj.description }}</p>
+          </blockquote>
+        </div>
+      </div>
+
+
+      {% if Result_obj %}
+      <div class="table-responsive">
+        <table class="table table-hover border m-0" id ="sort">
+          <thead>
+            <tr>
+              <th scope="col">Student ID</th>
+              <th scope="col">Student name</th>
+              <th scope="col">Obtained Marks</th>
+              <th scope="col">Submission Time</th>
+              <th scope="col">Submitted Ans</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in Result_obj %}
+            <tr>
+              <th scope="row">{{ i.student.studentID }}</th>
+              <td class="mytableoverflow">{{ i.student.name }}</td>
+              <td style="color: orange;">{{ i.totalObtainedMarks }}</td>
+              <td>{{ i.submissionTime }}</td>
+              <td><a href="{% url 'app:StudentIndividualAnsSheet' anssetpk=i.pk %}" type="button" class="btn btn-info btn-sm">Explore!</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="rom m-0 d-flex justify-content-center" style="margin-top: 100px !important;">
+        <img src="{% static 'imgs/no-search-found.png' %}" alt="Nothing Found" class="img-fluid">
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+
+  <div class="row m-0 d-flex justify-content-center mt-5">
+    <a href="{% url 'app:result' %}" type="button" class="btn btn-warning">Go Back</a>
+  </div>
+
+</div>
+
+{% endblock %}

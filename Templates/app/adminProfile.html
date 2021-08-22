@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container shadow p-3 mb-5 bg-white mt-5 px-4">
+    <div class="col-xl-12">
+      <h4 class="mt-2">Welcome Back {{ request.user }}</h4>
+      <hr>
+      <div class="row m-0 my-2">
+        <div class="col-xl-8 my-2">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ adminProfile_obj.name }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Full Name</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-2">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ request.user }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">User Name</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-8 my-2">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ adminProfile_obj.email }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Email</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-2">
+          <blockquote class="blockquote">
+            <p class="mb-0"> {{ adminProfile_obj.rank }}</p>
+            <footer class="blockquote-footer"><cite title="Source Title">Rank</cite></footer>
+          </blockquote>
+        </div>
+        <div class="col-xl-8 my-2">
+          <blockquote class="blockquote">
+            <p class="mb-0">Vaficication Status: {{ adminProfile_obj.isVarified }}</p>
+            {% if adminProfile_obj.isVarified %}
+            <footer class="blockquote-footer"><cite title="Source Title">Congrats! You are varrified Admin.</cite></footer>
+            {% else %}
+            <footer class="blockquote-footer"><cite title="Source Title">Opps! Please wait for superuser approval.</cite></footer>
+            {% endif %}
+          </blockquote>
+        </div>
+      </div>
+
+
+      {% if adminProfile_obj.isVarified %}
+      <div class="row m-0 my-5">
+        <div class="col-xl-12 p-0 m-0">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="questionSetter-tab" data-toggle="tab" href="#questionSetter" role="tab" aria-controls="questionSetter" aria-selected="true">All Question Setters</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="Students-tab" data-toggle="tab" href="#Students" role="tab" aria-controls="Students" aria-selected="false">All Students</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="Admin-tab" data-toggle="tab" href="#Admin" role="tab" aria-controls="Admin" aria-selected="false">All Admin</a>
+            </li>
+          </ul>
+          <div class="tab-content my-4 mx-3" id="myTabContent">
+
+
+            <div class="tab-pane fade show active" id="questionSetter" role="tabpanel" aria-labelledby="questionSetter-tab">
+              {% if QuestionSetter_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover border m-0" id ="sort">
+                  <thead>
+                    <tr>
+                      <th scope="col">User ID</th>
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Rank</th>
+                      <th scope="col">Approvement</th>
+                      <th scope="col">Approval</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in QuestionSetter_obj %}
+                    <tr>
+                      <th scope="row">{{ i.user.id }}</th>
+                      <td>{{ i.name }}</td>
+                      <td>{{ i.email }}</td>
+                      <td>{{ i.rank }}</td>
+                      {% if i.isVarified %}
+                      <td>Approved</td>
+                      <td><a href="{% url 'app:RemoveApprovalQuestionSetter' pk=i.pk %}"  type="button" class="btn btn-warning btn-sm">Remove</a></td>
+                      {% else %}
+                      <td>Not Approved</td>
+                      <td><a href="{% url 'app:ApproveQuestionSetter' pk=i.pk %}"  type="button" class="btn btn-primary btn-sm">Approve</a></td>
+                      {% endif %}
+                      <td><a href="{% url 'app:DeleteQuestionSetter' pk=i.pk %}"><img src="{% static 'icons/delete.svg' %}" class="myactnsize"></a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="row m-0 bg-light">
+                <i class="my-3 mx-2">Opps! No Question Settter Found!</i>
+              </div>
+              {% endif %}
+            </div>
+
+
+            <div class="tab-pane fade" id="Students" role="tabpanel" aria-labelledby="Rules-tab">
+              {% if Student_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover border m-0" id ="sort">
+                  <thead>
+                    <tr>
+                      <th scope="col">User ID</th>
+                      <th scope="col">Student Id</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Delete?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in Student_obj %}
+                    <tr>
+                      <th scope="row">{{ i.user.id }}</th>
+                      <td>{{ i.studentID }}</td>
+                      <td>{{ i.user.username }}</td>
+                      <td>{{ i.name }}</td>
+                      <td>{{ i.email }}</td>
+                      <td><a href="{% url 'app:DeleteStudent' pk=i.pk %}"><img src="{% static 'icons/delete.svg' %}" class="myactnsize"></a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="row m-0 bg-light">
+                <i class="my-3 mx-2">Opps! No Student Settter Found!</i>
+              </div>
+              {% endif %}
+            </div>
+
+
+            <div class="tab-pane fade" id="Admin" role="tabpanel" aria-labelledby="Admin-tab">
+              {% if Admin_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover border m-0" id ="sort">
+                  <thead>
+                    <tr>
+                      <th scope="col">User ID</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Approvement Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in Admin_obj %}
+                    <tr>
+                      <th scope="row">{{ i.user.id }}</th>
+                      <td>{{ i.user.username }}</td>
+                      <td>{{ i.name }}</td>
+                      <td>{{ i.email }}</td>
+                      {% if i.isVarified %}
+                      <td>Approved</td>
+                      {% else %}
+                      <td>Not Approved</td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="row m-0 bg-light">
+                <i class="my-3 mx-2">Opps! No Admin Settter Found!</i>
+              </div>
+              {% endif %}
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      <div class="row m-0 my-5">
+        <div class="col-xl-12 p-0 m-0">
+          <h4>Please Wait Until Superuser Approve You</h4>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+
+<style>
+  .mytableoverflow{
+    white-space: nowrap;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mytableoverflow:hover {
+    word-wrap: break-word;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .myactnsize{
+    max-width: 20px;
+  }
+
+</style>
+
+<script>
+function myFunction() {
+  alert("Are You Sure?!");
+}
+</script>
+
+
+
+{% endblock %}

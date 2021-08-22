@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row m-0 d-flex justify-content-center" style="padding-top: 20px;">
+    <div class="col-xl-8 mt-5" style="padding-top: 0px;">
+      <h2>Results</h2>
+      <p class="m-0 p-0">Explore Results of Completed Exam & Events</p>
+      <hr>
+
+      {% if Result_obj %}
+      <div class="table-responsive">
+        <table class="table table-hover border m-0" id ="sort">
+          <thead>
+            <tr>
+              <th scope="col">Exam ID</th>
+              <th scope="col">Exam Name</th>
+              <th scope="col">topic</th>
+              <th scope="col">Starting Time</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in Result_obj %}
+            <tr>
+              <th scope="row">{{ i.pk }}</th>
+              <td class="mytableoverflow">{{ i.examName }}</td>
+              <td><small class="card-text px-2 py-1 rounded" style="color: white; background-color:orange;">{{ i.topic }}</small></td>
+              <td>{{ i.startingTime }}</td>
+              <td>{{ i.durationInMinits }}</td>
+              <td><a href="{% url 'app:resultSingle' questionsetpk=i.pk %}" type="button" class="btn btn-info btn-sm">Explore!</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="rom m-0 d-flex justify-content-center" style="margin-top: 100px !important;">
+        <img src="{% static 'imgs/no-search-found.png' %}" alt="Nothing Found" class="img-fluid">
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

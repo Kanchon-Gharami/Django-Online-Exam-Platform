@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="container shadow p-3 mb-5 bg-white mt-5 px-4">
+    <div class="col-xl-12">
+      <h4 class="mt-2">Exam Details</h4>
+      <hr>
+      <div class="row m-0 my-1">
+        <div class="col-xl-9 my-2">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Exam Name</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.examName }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-3 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">topic</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.topic }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-5 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Starting Time</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.startingTime }}</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-4 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Duration</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.durationInMinits }} Minits</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-3 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Total</cite></footer>
+            <p class="mb-0"> {{ QuestionSet_obj.totalMarks }} Marks</p>
+          </blockquote>
+        </div>
+        <div class="col-xl-12 my-1">
+          <blockquote class="blockquote">
+            <footer class="blockquote-footer"><cite title="Source Title">Description</cite></footer>
+            <p class="mb-0" style="font-size: 15px;"> {{ QuestionSet_obj.description }}</p>
+          </blockquote>
+        </div>
+      </div>
+
+
+      <div style="height:20px;"></div>
+
+
+      <h4 class="col-xl-6 p-0 mt-5">Question Paper</h4>
+      <hr>
+
+      <form method="post" action="{% url 'app:ExamAnsSubmission' anssetpk=StudentAnsSet_obj.pk %}">
+        {% csrf_token %}
+
+        {% for i in StudentAnsTureFalse_obj %}
+        <div class="col-xl-12 p-0 my-5">
+          <div class="row m-0">
+            <div class="col-xl-10 p-0 m-0">
+              <h5>Q-1.{{forloop.counter}}: {{ i.question }}</h5>
+            </div>
+            <div class="col-xl-2 p-0 m-0">
+              <p class="text-right">Marks: {{ i.question.marks }}</p>
+            </div>
+          </div>
+
+          <div class="form-group col-xl-12">
+            <div class="radio">
+              <label><input type="radio" class="mx-2" name="TrueFalseAns_{{ i.pk }}" value="True" required>True</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" class="mx-2" name="TrueFalseAns_{{ i.pk }}" value="False" required>False</label>
+            </div>
+          </div>
+
+          <input type="number" name="TureFalsequestionpk" value="{{ i.pk }}" style="display:none;">
+
+        </div>
+        <div style="height: 1px;"></div>
+        {% endfor %}
+
+
+
+        {% for i in studentAnsNumeric_obj %}
+        <div class="col-xl-12 p-0 my-5">
+          <div class="row m-0">
+            <div class="col-xl-10 p-0 m-0">
+              <h5>Q-2.{{forloop.counter}}: {{ i.question }}</h5>
+            </div>
+            <div class="col-xl-2 p-0 m-0">
+              <p class="text-right">Marks: {{ i.question.marks }}</p>
+            </div>
+          </div>
+
+          <div class="form-group col-xl-4 mt-2">
+            <input type="number" class="form-control custmz_input" name="NumericAns_{{ i.pk }}" placeholder="Enter Correct Ans"  required>
+          </div>
+          <input type="number" name="Numericquestionpk" value="NumericAns" style="display:none;">
+
+        </div>
+        <div style="height: 1px;"></div>
+        {% endfor %}
+
+        <div class="row m-0 my-5">
+          <a href="{% url 'app:examevent' %}" type="button" class="btn btn-warning ml-auto px-4">Leave</a>
+          <button type="submit" class="btn btn-primary ml-4 px-4">Submit</button>
+        </div>
+      </form>
+
+
+
+
+    </div>
+  </div>
+
+
+  <div style="height: 30px;"></div>
+
+
+
+  </div>
+</div>
+
+
+
+<style>
+  .custmz_input{
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+
+  }
+</style>
+
+
+{% endblock %}

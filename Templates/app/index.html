@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+
+  <!-- 1st style -->      <!-- Theme Color: #64B53B -->
+
+  <div class="container-fluid p-0">
+    <div class="row m-0 d-flex justify-content-center bg-light" style="padding-top: 100px; padding-bottom: 160px;">
+      <div class="col-xl-5 mt-5" style="padding-top: 20px;">
+        <h2>
+          Online Exam Platform
+        </h2>
+        <h5>
+          EXPLORE OUR EDUCATION SYSTEM AND TEST YOURSELF
+        </h5>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          uis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat  upidatat non proident, sunt in culpa qui officia deserunt ollit anim id est laborum.
+        </p>
+        {% if user.is_authenticated %}
+          <a class="btn btn-outline-success pl-3 my-2" href="{% url 'app:redirectToProfile' %}">Explore Your Workspace!</a>
+        {% else %}
+          <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">Get Started</button>
+        {% endif %}
+      </div>
+      <div class="col-xl-3 ml-5">
+        <img src="{% static 'imgs/cvr.svg' %}" alt="" class="img-fluid banner-pic">
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+  .my_nav_style{
+    background-color: #64B53B !important;
+  }
+  </style>
+
+
+
+
+
+
+
+  <!-- 2nd style -->      <!-- Theme Color: #00676C -->
+
+  <!--
+  <link href='https://fonts.googleapis.com/css?family=Otomanopee One' rel='stylesheet'>
+
+  <div class="container-fluid p-0 bg_pic">
+    <div class="row m-0 d-flex justify-content-center">
+      <div class="col-xl-5 ml-5">
+        <img src="{% static 'imgs/art.svg' %}" alt="" class="img-fluid">
+      </div>
+      <div class="col-xl-5 mt-5 ml-5" style="padding-top: 60px;">
+        <h3 style="font-family: 'Otomanopee One'; color: #FAFF4E; font-size: 40px; font-weight: 600;">
+          BACK TO SCHOOL
+        </h3>
+        <h1 style="font-family: 'Otomanopee One'; color:white; font-size: 60px;">
+          Online Exam Platform
+        </h1>
+        <p style="color:white;">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          uis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat  upidatat non proident, sunt in culpa qui officia deserunt ollit anim id est laborum.
+        </p>
+        {% if user.is_authenticated %}
+          <a class="btn btn-success pl-3 my-2" href="{% url 'app:redirectToProfile' %}">Explore Your Workspace!</a>
+        {% else %}
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">Get Started</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <style>
+  .my_nav_style{
+    background-color: #00676C !important;
+  }
+  .bg_pic{
+    background: url("/static/imgs/backgroung.jpg") no-repeat fixed;
+    background-size: 100% 100%;
+    min-height: 665px;
+
+  }
+  </style>
+
+  -->
+
+
+
+{% endblock %}
