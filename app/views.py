@@ -373,6 +373,8 @@ def DeleteExam(request, pk):
 def DeleteNumericQuestion(request, pk):
     QuestionNumeric_obj = QuestionNumeric.objects.get(id=pk)
     Question_set = QuestionSet.objects.filter(questionNumeric=QuestionNumeric_obj).first()
+    Question_set.totalMarks = Question_set.totalMarks - QuestionNumeric_obj.marks
+    Question_set.save()
     QuestionNumeric_obj.delete()
     mypk = Question_set.pk
     return redirect('app:QuestionSetting', pk=mypk)
@@ -381,6 +383,8 @@ def DeleteNumericQuestion(request, pk):
 def DeleteTrueFalseQuestion(request, pk):
     QuestionTureFalse_obj = QuestionTureFalse.objects.get(id=pk)
     Question_set = QuestionSet.objects.filter(questionTureFalse=QuestionTureFalse_obj).first()
+    Question_set.totalMarks = Question_set.totalMarks - QuestionTureFalse_obj.marks
+    Question_set.save()
     QuestionTureFalse_obj.delete()
     mypk = Question_set.pk
     return redirect('app:QuestionSetting', pk=mypk)
